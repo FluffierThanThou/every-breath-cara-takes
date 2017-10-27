@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Every breath Cara takes</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div id="countdown" onclick="breathTaken()">
+            <div class="center-text">
+                <div id="seconds">0</div>
+                <div id="breaths">0 breaths</div>
+                <div id="bpm">0 bpm</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    var countdownPeriod = 15;
+    var button = document.getElementById("countdown");
+    var secondsElement = document.getElementById("seconds");
+    var breathsElement = document.getElementById("breaths");
+    var bpmElement = document.getElementById("bpm");
+    var countdownTimer = setInterval( countdown, 1000 );
+    var breathsMeasured = 0;
+    var breathsPerMinute = 0;
+    var done = false;
+
+    // initialize
+    secondsElement.innerText = countdownPeriod;
+    updateBpm(0);
+
+    // what to do each second
+    function countdown() {
+        secondsElement.innerText--;
+        updateBpm();
+
+        // done!
+        if (secondsElement.innerText <= 0){
+            done = true;
+            clearInterval( countdownTimer );
+            postResult( breathsPerMinute );
+        }
+    }   
+
+    // what to do on button press
+    function breathTaken() {
+        if (done) return;
+        breathsMeasured++;
+        updateBpm();
+        updateBreaths();
+        buzz();
+        blink();
+    }
+
+    // update breaths per minute
+    function updateBpm(value){
+        if (typeof(value) === "undefined"){
+            var time = ( countdownPeriod - secondsElement.innerText )
+            breathsPerMinute = (60 / time) * breathsMeasured;
+        } else {
+            breathsPerMinute = value;
+        }
+        
+        bpmElement.innerText = `${round(breathsPerMinute,0)} bpm`;
+    }
+
+    // update breaths display
+    function updateBreaths(){
+        breathsElement.innerText = `${breathsMeasured} breaths`;
+    }
+
+    // buzz that phone!
+    function buzz(){
+        window.navigator.vibrate(200);
+    }
+
+    // blink that circle!
+    function blink(){
+        button.classList.add('blink');
+        window.setTimeout( () => {
+            button.classList.remove('blink');
+        }, 200 );
+    }
+
+    // publish the result
+    function postResult( bpm ){
+        var xhr = new XMLHttpRequest();
+        xhr.open( "POST", "/data" );
+        
+        // set header
+        xhr.setRequestHeader("Content-Type", "application/json" );
+
+        // when sent, reload the main page
+        xhr.onload = function() { document.location = "/" };
+
+        // do the magic!
+        xhr.send( JSON.stringify( { count: bpm } ) );
+    }
+
+    function round(value, digits){
+        var factor = Math.pow( 10, digits );
+        var temp = Math.round( value * factor );
+        return temp / factor;
+    }
+
+    document.body.setScaledFont = function (f) {
+        var s = this.offsetWidth,
+        fs = s * f;
+        this.style.fontSize = fs + '%';
+        return this
+    };
+
+    document.body.setScaledFont(0.35);
+    window.onresize = function () {
+        document.body.setScaledFont(0.35);
+    }
+
+    </script>
+</body>
+</html>

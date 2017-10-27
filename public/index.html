@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Every breath Cara takes</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.19.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <a class="btn btn-lg btn-success" id="button" href="measurement.html">New measurement</a>
+        <canvas id="graph"></canvas>
+    </div>
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'data');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                drawChart( JSON.parse( xhr.responseText ) )
+            }
+            else {
+                alert('Request failed.  Returned status of ' + xhr.status);
+            }
+        };
+        xhr.send();
+
+        function drawChart( data ){
+            var canvas = document.getElementById('graph').getContext('2d');
+            var chart = new Chart(canvas, {
+                // The type of chart we want to create
+                type: 'line',
+    
+                // The data for our dataset
+                data: {
+                    datasets: [{
+                        label: "Every breath Cara takes",
+                        backgroundColor: 'rgba(255, 99, 132, .1)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        // lineTension: .4,
+                        data: data
+                    }]
+                },
+    
+                // Configuration options go here
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: "time"
+                        }]
+                    }
+                }
+            });
+        }
+        </script>
+</body>
+</html>

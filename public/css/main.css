@@ -1,0 +1,52 @@
+#button {
+    padding: 1em;
+    width: 100%;
+    margin: 2em 0;
+}
+
+#graph {
+    padding: 1em;
+    width: 100%;
+    margin: 2em 0;
+}
+
+#countdown {
+    border-radius: 50%;
+    background-color: #4682b4; /* steelblue */
+    border: 5px solid white;
+    display: table;
+
+    /* https://stackoverflow.com/questions/20590239/maintain-aspect-ratio-of-div-but-fill-screen-width-and-height-in-css */
+    width: 100vw; 
+    height: 100vw; /* height:width ratio = 9/16 = .5625  */
+    max-height: 100vh;
+    max-width: 100vh; /* 16/9 = 1.778 */
+    margin: auto;
+    position: absolute;
+    top:0;bottom:0; /* vertical center */
+    left:0;right:0; /* horizontal center */
+
+    transition: all 0.2s ease-in-out;
+}
+
+#countdown.blink {
+    background-color: #245d8b; /* slightly darker steelblue */
+}
+
+.center-text {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    /* line-height: 100%; */
+}
+
+#seconds {
+    display: inline-block;
+    font-size: 5em;
+    color: white;
+}
+
+#bpm, #breaths {
+    font-size: 2em;
+    color: white;
+}
