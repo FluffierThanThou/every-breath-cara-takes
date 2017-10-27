@@ -2,7 +2,7 @@ const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 import * as moment from 'moment'
 
-const adapter = new FileSync('db.json', {
+const adapter = new FileSync('../db/db.json', {
   defaultValue: { measurements: [] }
 })
 const db = low(adapter)

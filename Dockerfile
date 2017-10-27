@@ -11,7 +11,7 @@ COPY ./package.json /app/package.json
 RUN yarn install
 
 # copy app
-VOLUME db.json
+VOLUME db
 COPY ./server /app/server
 COPY ./public /app/public
 COPY ./nodemon.json /app/nodemon.json
